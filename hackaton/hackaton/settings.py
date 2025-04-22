@@ -25,8 +25,36 @@ SECRET_KEY = 'django-insecure-jkqo0aeomhu*&pd7rya!3k+s*n92ei%-ftehp-^0v-ep9hwk!^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # URL de prueba en desarrollo local
+    "http://127.0.0.1:8000",  # Otra URL local
+    "http://10.0.2.2:8000",  # Para emuladores de Android
+    "http://127.0.0.1:50826",  # URL de prueba en desarrollo local flutter
+    "http://localhost:50826",  # La URL de tu frontend
+    "http://localhost:50347",  # La URL de tu frontend release
+    "https://gray-desert-0a8370510-preview.centralus.6.azurestaticapps.net",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'accept',
+    'x-requested-with',
+    'access-control-allow-origin',
+]
 
 # Application definition
 
@@ -37,11 +65,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Internal apps
+    'doctor',
+    'paciente',
+    'estudio',
+    # External apps
+    'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_yasg',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -75,8 +114,12 @@ WSGI_APPLICATION = 'hackaton.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hackaton',  # Reemplaza con el nombre real de la BD en pgAdmin
+        'USER': 'andremejia',  # Usuario de PostgreSQL
+        'PASSWORD': 'admin',  # Contraseña del usuario
+        'HOST': 'localhost',  # Usar localhost para conexiones locales
+        'PORT': '5432',  # Puerto por defecto de PostgreSQL
     }
 }
 
