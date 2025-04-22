@@ -8,4 +8,4 @@ from .models import Paciente
 
 class PacienteView(viewsets.ModelViewSet):
     serializer_class = PacienteSerializer
-    queryset = Paciente.objets.all()
+    queryset = Paciente.objects.all()
