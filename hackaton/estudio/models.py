@@ -2,7 +2,6 @@ import uuid
 from django.db import models
 from django.utils import timezone
 
-from doctor.models import Doctor
 from paciente.models import Paciente
 from .storage_backends import DicomAzureStorage
 
@@ -25,8 +24,6 @@ class Estudio(models.Model):
     folio = models.CharField(max_length=30, unique=True)
     tipo = models.CharField(max_length=100)          # TC, RM, RX …
 
-    doctor = models.ForeignKey(
-        Doctor,   on_delete=models.PROTECT, related_name="estudios")
     paciente = models.ForeignKey(
         Paciente, on_delete=models.PROTECT, related_name="estudios")
 

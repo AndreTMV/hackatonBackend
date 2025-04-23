@@ -1,4 +1,3 @@
-
 from rest_framework import viewsets
 from .models import Estudio
 from .serializer import EstudioSerializer
@@ -14,7 +13,7 @@ class EstudioViewSet(viewsets.ModelViewSet):
         • paciente       (ID)
         • dicom_file     (archivo .dcm, multipart/form‑data)
     """
-    queryset = Estudio.objects.all().select_related("doctor", "paciente")
+    queryset = Estudio.objects.all().select_related("paciente")
     serializer_class = EstudioSerializer
 
     def get_queryset(self):

@@ -9,7 +9,7 @@ class EstudioSerializer(serializers.ModelSerializer):
         model = Estudio
         fields = [
             "id", "folio", "tipo",
-            "doctor", "paciente",
+            "paciente",
             "dicom_file", "fecha", "url_descarga",
         ]
         read_only_fields = ("id", "fecha", "url_descarga")
