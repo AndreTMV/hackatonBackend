@@ -5,8 +5,7 @@ from .models import Paciente
 
 
 class PacienteAdmin(admin.ModelAdmin):
-    list_display = ('curp', 'nombre', 'apellido',
-                    'correo', 'telefono', 'edad', 'sexo')
+    list_display = ('id', 'nombre', 'fecha_nac')
 
 
 admin.site.register(Paciente, PacienteAdmin)

@@ -8,7 +8,7 @@ class EstudioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estudio
         fields = [
-            "id", "folio", "tipo",
+            "id", "folio",
             "paciente",
             "dicom_file", "fecha", "url_descarga",
         ]

@@ -8,7 +8,6 @@ class EstudioViewSet(viewsets.ModelViewSet):
     CRUD de estudios sin autenticación.
     El cliente debe mandar:
         • folio          (str)
-        • tipo           (str)
         • doctor         (ID)
         • paciente       (ID)
         • dicom_file     (archivo .dcm, multipart/form‑data)

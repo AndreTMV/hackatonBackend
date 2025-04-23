@@ -5,11 +5,9 @@ from .models import Estudio
 class EstudioAdmin(admin.ModelAdmin):
     list_display = (
         "folio",
-        "tipo",
         "paciente",
         "fecha",
     )
-    list_filter = ("tipo", "fecha")
     search_fields = ("folio", "paciente__nombre")
 
 

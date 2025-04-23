@@ -22,7 +22,6 @@ class Estudio(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     folio = models.CharField(max_length=30, unique=True)
-    tipo = models.CharField(max_length=100)          # TC, RM, RX …
 
     paciente = models.ForeignKey(
         Paciente, on_delete=models.PROTECT, related_name="estudios")
@@ -40,7 +39,7 @@ class Estudio(models.Model):
 
     # — helpers —
     def __str__(self):
-        return f"{self.folio} · {self.tipo} · {self.fecha:%Y‑%m‑%d}"
+        return f"{self.folio} {self.fecha:%Y‑%m‑%d}"
 
     def url_descarga(self):
         """URL SAS válida 15 min (generada por django‑storages)."""
