@@ -18,6 +18,7 @@ The module auto‑caches AAD tokens for ~5 minutes to avoid hitting the
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
+import logging
 import json
 import os
 import re
@@ -227,8 +228,9 @@ def list_series(study_uid: str):
 
 
 def list_instances(study_uid: str, series_uid: str):
+    url = f"{_BASE}/studies/{study_uid}/series/{series_uid}/instances"
     resp = requests.get(
-        f"{_BASE}/studies/{study_uid}/series/{series_uid}/instances",
+        url,
         headers={
             "Authorization": _token(),
             "Accept": "application/dicom+json",
@@ -236,6 +238,19 @@ def list_instances(study_uid: str, series_uid: str):
         timeout=30,
     )
     resp.raise_for_status()
+    if not resp.content:
+        print("list_instances: 204 No Content para %s", url)
+        return []
+
+    # Intentamos parsear JSON, si falla devolvemos lista vacía
+    try:
+        return resp.json()
+    except ValueError:
+        print(
+            "list_instances: no vino JSON válido de %s; contenido: %r",
+            url, resp.text
+        )
+        return []
     return resp.json()
 
 
