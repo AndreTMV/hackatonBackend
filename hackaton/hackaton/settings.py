@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'doctor',
     'paciente',
     'estudio',
+    'link',
     # External apps
     'corsheaders',
     'rest_framework',
