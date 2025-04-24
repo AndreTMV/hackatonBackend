@@ -38,9 +38,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:50826",  # La URL de tu frontend
     "http://localhost:50347",  # La URL de tu frontend release
     "https://gray-desert-0a8370510-preview.centralus.6.azurestaticapps.net",
+    "http://localhost:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
     'GET',
