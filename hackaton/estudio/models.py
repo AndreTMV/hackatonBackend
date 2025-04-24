@@ -1,46 +1,27 @@
-import uuid
 from django.db import models
 from django.utils import timezone
-
+from django.conf import settings
 from paciente.models import Paciente
-from .storage_backends import DicomAzureStorage
-
-
-def dicom_upload_path(instance, filename):
-    """
-    Ruta dentro del contenedor:
-    dicoms/2025/04/22/<UUID>.dcm
-    """
-    today = timezone.localdate()
-    return f"{today:%Y/%m/%d}/{uuid.uuid4()}.dcm"
 
 
 class Estudio(models.Model):
     """
-    Un estudio DICOM subido por un doctor y
-    asociado a un paciente.
+    Referencia local a un Study almacenado en Azure DICOM Service.
     """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    study_uid = models.CharField(max_length=64, primary_key=True)
     folio = models.CharField(max_length=30, unique=True)
-
     paciente = models.ForeignKey(
         Paciente, on_delete=models.PROTECT, related_name="estudios")
-
-    dicom_file = models.FileField(
-        storage=DicomAzureStorage(),          # backend que creaste
-        upload_to=dicom_upload_path
-    )
-
     fecha = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ("-fecha",)
         indexes = [models.Index(fields=["paciente", "fecha"])]
 
-    # — helpers —
-    def __str__(self):
-        return f"{self.folio} {self.fecha:%Y‑%m‑%d}"
+    # --- helpers ---------------------------------------------------------
+    def wado_url(self):
+        base = settings.AZURE_DICOM_URL.rstrip("/")
+        return f"{base}/v2/dicomweb/studies/{self.study_uid}"
 
-    def url_descarga(self):
-        """URL SAS válida 15 min (generada por django‑storages)."""
-        return self.dicom_file.url
+    def __str__(self):
+        return f"{self.folio} ({self.study_uid})"

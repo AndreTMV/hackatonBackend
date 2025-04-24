@@ -1,14 +1,12 @@
-from rest_framework.routers import DefaultRouter
-from estudio.views import EstudioViewSet
-from rest_framework import routers
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter, SimpleRouter
+from .views import EstudioViewSet, CargaEstudioView
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
-
-router = DefaultRouter()
-router.register(r"estudios", EstudioViewSet, basename="estudio")
+router = SimpleRouter()
+router.register("estudios", EstudioViewSet, basename="estudio")
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -22,9 +20,8 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
-
 urlpatterns = [
     path("api/v1/", include(router.urls)),
-    path('docs/', schema_view.with_ui('swagger',
-                                      cache_timeout=0), name='schema-swagger-ui'),
+    path("api/v1/cargar-estudio/",
+         CargaEstudioView.as_view(), name="cargar-estudio"),
 ]

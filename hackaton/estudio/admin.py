@@ -4,6 +4,7 @@ from .models import Estudio
 
 class EstudioAdmin(admin.ModelAdmin):
     list_display = (
+        "study_uid",
         "folio",
         "paciente",
         "fecha",
