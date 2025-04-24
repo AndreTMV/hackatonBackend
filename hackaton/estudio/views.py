@@ -1,9 +1,11 @@
+from requests import api
 from rest_framework import viewsets, generics, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Estudio
+from rest_framework.decorators import api_view, permission_classes
 from .serializer import EstudioSerializer, CargaEstudioSerializer
-from .azure_dicom import list_series, list_instances
+from .azure_dicom import list_series, list_instances, wado_instance_url
 
 # ---------- sólo lectura ----------
 
@@ -42,3 +44,18 @@ class CargaEstudioView(generics.CreateAPIView):
         # 1. copia `paths` al contenedor dicom-import/
         # 2. devuelve una SAS URL del folder
         return {"sas_url_func": lambda paths: "<sas_url_de_carpeta>"}
+
+
+@api_view(['GET'])
+def get_all_instance_urls(request, study_uid: str):
+    urls = []
+    for serie in list_series(study_uid):
+        series_uid = serie["0020000E"]["Value"][0]
+        # list_instances devuelve dicts, así que extraemos el UID aquí:
+        for inst in list_instances(study_uid, series_uid):
+            sop_list = inst.get("00080018", {}).get("Value", [])
+            if not sop_list:
+                continue
+            sop_uid = sop_list[0]
+            urls.append(wado_instance_url(study_uid, series_uid, sop_uid))
+    return Response(urls)

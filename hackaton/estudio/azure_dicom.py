@@ -237,6 +237,7 @@ def list_instances(study_uid: str, series_uid: str):
         },
         timeout=30,
     )
+    print(resp)
     resp.raise_for_status()
     if not resp.content:
         print("list_instances: 204 No Content para %s", url)
@@ -251,7 +252,6 @@ def list_instances(study_uid: str, series_uid: str):
             url, resp.text
         )
         return []
-    return resp.json()
 
 
 ###########################################################################
